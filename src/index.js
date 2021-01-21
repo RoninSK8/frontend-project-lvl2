@@ -1,19 +1,15 @@
-const _ = require('lodash');
+import * as _ from 'lodash';
+import fs from 'fs';
+import path from 'path';
+import process from 'process';
 
-const json1 = {
-  "host": "hexlet.io",
-  "timeout": 50,
-  "proxy": "123.234.53.22",
-  "follow": false
-}
+const readFile = (filePath) => JSON.parse(fs.readFileSync(path.resolve(process.cwd(), filePath), "utf-8"));
 
-const json2 = {
-  "timeout": 20,
-  "verbose": true,
-  "host": "hexlet.io"
-}
+// console.log(readFile('/home/ronin/svalka/testFile2.json'))
 
-const compare = (object1, object2) => {
+const genDiff = (path1, path2) => {
+  const object1 = readFile(path1);
+  const object2 = readFile(path2);
   const object1keys = Object.keys(object1);
   const object2keys = Object.keys(object2);
   const uniqueKeys = _.union(object1keys, object2keys);
@@ -44,4 +40,4 @@ const compare = (object1, object2) => {
   return `{\n${result.join('\n')}\n}`;
 }
 
-console.log(compare(json1, json2));
+export default genDiff;

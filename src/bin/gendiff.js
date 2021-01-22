@@ -8,6 +8,8 @@ program
   
   .option('-f, --format', 'output format')
   .arguments('<filepath1> <filepath2>')
-  .action(genDiff(filepath1, filepath2))
+  .action((filepath1, filepath2) => {
+    genDiff(filepath1, filepath2);
+  })
 
 program.parse(process.argv);

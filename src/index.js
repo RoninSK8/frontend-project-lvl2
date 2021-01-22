@@ -5,8 +5,6 @@ import process from 'process';
 
 const readFile = (filePath) => JSON.parse(fs.readFileSync(path.resolve(process.cwd(), filePath), "utf-8"));
 
-// console.log(readFile('/home/ronin/svalka/testFile2.json'))
-
 const genDiff = (path1, path2) => {
   const object1 = readFile(path1);
   const object2 = readFile(path2);
@@ -41,3 +39,6 @@ const genDiff = (path1, path2) => {
 }
 
 export default genDiff;
+
+// console.log(genDiff('/home/ronin/svalka/testFile1.json', '/home/ronin/svalka/testFile2.json'))
+console.log(_.difference([2, 1], [2, 3]));

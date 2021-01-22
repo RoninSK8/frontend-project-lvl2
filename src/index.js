@@ -1,11 +1,11 @@
-import * as _ from 'lodash';
+import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
 import process from 'process';
 
-const readFile = (filePath) => JSON.parse(fs.readFileSync(path.resolve(process.cwd(), filePath), "utf-8"));
 
 const genDiff = (path1, path2) => {
+  const readFile = (filePath) => JSON.parse(fs.readFileSync(path.resolve(process.cwd(), filePath), "utf-8"));
   const object1 = readFile(path1);
   const object2 = readFile(path2);
   const object1keys = Object.keys(object1);
@@ -35,10 +35,9 @@ const genDiff = (path1, path2) => {
     res.push(`${item.status} ${item.key}: ${item.value}`);
     return res;
   }, [])
-  return `{\n${result.join('\n')}\n}`;
+  console.log(`{\n${result.join('\n')}\n}`);
 }
 
 export default genDiff;
 
-// console.log(genDiff('/home/ronin/svalka/testFile1.json', '/home/ronin/svalka/testFile2.json'))
-console.log(_.difference([2, 1], [2, 3]));
+// console.log(genDiff('/frontend-project-lvl2/testFile1.json', '../testFile2.json'));

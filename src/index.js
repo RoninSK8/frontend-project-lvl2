@@ -13,18 +13,18 @@ const genDiff = (path1, path2) => {
 
   const statusCollection = uniqueKeys.reduce((result, key) => {
     if (!_.has(object1, key)) {
-      result.push({ key, value: object2[key], status: '+' });
+      result.push({ key, value: object2[key], status: '  +' });
     }
     if (!_.has(object2, key)) {
-      result.push({ key, value: object1[key], status: '-' });
+      result.push({ key, value: object1[key], status: '  -' });
     }
     if (_.has(object1, key) && _.has(object2, key)) {
       if (object1[key] !== object2[key]) {
-        result.push({ key, value: object1[key], status: '-' });
-        result.push({ key, value: object2[key], status: '+' });
+        result.push({ key, value: object1[key], status: '  -' });
+        result.push({ key, value: object2[key], status: '  +' });
       }
       if (object1[key] === object2[key]) {
-        result.push({ key, value: object1[key], status: ' ' });
+        result.push({ key, value: object1[key], status: '   ' });
       }
     }
     return result;
@@ -34,9 +34,8 @@ const genDiff = (path1, path2) => {
     res.push(`${item.status} ${item.key}: ${item.value}`);
     return res;
   }, []);
-  console.log(`{\n${result.join('\n')}\n}`);
+  const formattedResult = `{\n${result.join('\n')}\n}`;
+  return formattedResult;
 };
 
 export default genDiff;
-
-// console.log(genDiff('/frontend-project-lvl2/testFile1.json', '../testFile2.json'));

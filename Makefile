@@ -5,4 +5,4 @@ test:
 	npx -n --experimental-vm-modules jest --watch
 
 test-coverage:
-	npx -n --experimental-vm-modules jest --coverage
+	npx test -- --coverage

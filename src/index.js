@@ -2,11 +2,15 @@ import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
 import process from 'process';
+import parse from './parsers.js';
 
 const genDiff = (path1, path2) => {
-  const readFile = (filePath) => JSON.parse(fs.readFileSync(path.resolve(process.cwd(), filePath), 'utf-8'));
-  const object1 = readFile(path1);
-  const object2 = readFile(path2);
+  const normaliseFilePath = (filePath) => path.resolve(process.cwd(), filePath);
+  const getFile = (filePath) => fs.readFileSync(normaliseFilePath(filePath), 'utf-8');
+  const getFileFormat = (file) => path.extname(file).toLowerCase();
+
+  const object1 = parse(getFile(path1), getFileFormat(path1));
+  const object2 = parse(getFile(path2), getFileFormat(path2));
   const object1keys = Object.keys(object1);
   const object2keys = Object.keys(object2);
   const uniqueKeys = _.union(object1keys, object2keys);

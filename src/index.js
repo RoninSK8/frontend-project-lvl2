@@ -1,45 +1,21 @@
-import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
 import process from 'process';
 import parse from './parsers.js';
+import format from './formatters/index.js';
+import getComparisonData from './getComparisonData.js';
 
-const genDiff = (path1, path2) => {
+const genDiff = (path1, path2, formatter = 'stylish') => {
   const normaliseFilePath = (filePath) => path.resolve(process.cwd(), filePath);
   const getFile = (filePath) => fs.readFileSync(normaliseFilePath(filePath), 'utf-8');
   const getFileFormat = (file) => path.extname(file).toLowerCase();
 
-  const object1 = parse(getFile(path1), getFileFormat(path1));
-  const object2 = parse(getFile(path2), getFileFormat(path2));
-  const object1keys = Object.keys(object1);
-  const object2keys = Object.keys(object2);
-  const uniqueKeys = _.union(object1keys, object2keys);
+  const file1Data = parse(getFile(path1), getFileFormat(path1));
+  const file2Data = parse(getFile(path2), getFileFormat(path2));
 
-  const statusCollection = uniqueKeys.reduce((result, key) => {
-    if (!_.has(object1, key)) {
-      result.push({ key, value: object2[key], status: '  +' });
-    }
-    if (!_.has(object2, key)) {
-      result.push({ key, value: object1[key], status: '  -' });
-    }
-    if (_.has(object1, key) && _.has(object2, key)) {
-      if (object1[key] !== object2[key]) {
-        result.push({ key, value: object1[key], status: '  -' });
-        result.push({ key, value: object2[key], status: '  +' });
-      }
-      if (object1[key] === object2[key]) {
-        result.push({ key, value: object1[key], status: '   ' });
-      }
-    }
-    return result;
-  }, []);
-  const sortedStatusCollection = _.sortBy(statusCollection, [(o) => o.key]);
-  const result = sortedStatusCollection.reduce((res, item) => {
-    res.push(`${item.status} ${item.key}: ${item.value}`);
-    return res;
-  }, []);
-  const formattedResult = `{\n${result.join('\n')}\n}`;
-  return formattedResult;
+  // console.log(stylish(getComparisonData(file1Data, file2Data), formatter));
+  return format(getComparisonData(file1Data, file2Data), formatter);
+  // console.log(getComparisonData(file1Data, file2Data));
 };
-
+console.log(genDiff('/home/ronin/frontend-project-lvl2/__fixtures__/testFile1.json', '/home/ronin/frontend-project-lvl2/__fixtures__/testFile2.yaml'));
 export default genDiff;

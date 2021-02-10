@@ -15,8 +15,9 @@ const getComparisonData = (file1Data, file2Data) => {
     } else if (_.isEqual(file1Data[key], file2Data[key])) {
       result.push({ key, value: file1Data[key], status: 'unchanged' });
     } else {
-      result.push({ key, value: file1Data[key], status: 'deleted' });
-      result.push({ key, value: file2Data[key], status: 'added' });
+      result.push({
+        key, oldValue: file1Data[key], newValue: file2Data[key], status: 'updated',
+      });
     }
     return result;
   }, []);

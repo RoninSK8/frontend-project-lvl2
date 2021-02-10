@@ -26,6 +26,8 @@ const stylish = (tree) => {
           return `${' '.repeat(depth * 4 - 2)}- ${item.key}: ${convertToString(item.value, depth)}`;
         case 'unchanged':
           return `${'    '.repeat(depth)}${item.key}: ${convertToString(item.value, depth)}`;
+        case 'updated':
+          return `${' '.repeat(depth * 4 - 2)}- ${item.key}: ${convertToString(item.oldValue, depth)}\n${' '.repeat(depth * 4 - 2)}+ ${item.key}: ${convertToString(item.newValue, depth)}`;
         case 'node':
           return `${'    '.repeat(depth)}${item.key}: {\n${iter(item.children, depth + 1)}\n${'    '.repeat(depth)}}`;
         default:

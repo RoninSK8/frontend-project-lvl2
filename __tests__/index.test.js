@@ -23,3 +23,8 @@ test('comparing yaml vs yaml', () => {
   const testDiff = genDiff(getFixturePath('testFile1.yaml'), getFixturePath('testFile2.yaml'));
   expect(testDiff).toMatch(readFile('testResult.txt'));
 });
+
+test('comparing json vs yaml in plain format', () => {
+  const testDiff = genDiff(getFixturePath('testFile1.json'), getFixturePath('testFile2.yaml'), 'plain');
+  expect(testDiff).toMatch(readFile('plainResult.txt'));
+});

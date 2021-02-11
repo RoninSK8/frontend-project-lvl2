@@ -27,8 +27,9 @@
 * Supports `.json` and `.yaml` files
 * Supports relative and absolute paths
 * You can choose an output format:
-  - stylish
-```
+```bash
+# stylish format
+
 {
     common: {
       + follow: false
@@ -51,8 +52,10 @@
     }
 }
 ```
-  - plain
-```
+
+```bash
+# plain format
+
 Property 'common.follow' was added with value: false
 Property 'common.setting2' was removed
 Property 'common.setting3' was updated. From true to null
@@ -61,8 +64,10 @@ Property 'common.setting5' was added with value: [complex value]
 Property 'common.setting6.doge.wow' was updated. From '' to 'so much'
 Property 'common.setting6.ops' was added with value: 'vops'
 ```
-  - json
-```
+
+```bash
+# json format
+
   [{"key":"common","status":"node","children":[{"key":"follow","value":false,"status":"added"},{"key":"setting1","value":"Value 1","status":"unchanged"},{"key":"setting2","value":200,"status":"deleted"},{"key":"setting3","oldValue":true,"newValue":null,"status":"updated"},{"key":"setting4","value":"blah blah","status":"added"},{"key":"setting5","value":{"key5":"value5"},"status":"added"},{"key":"setting6","status":"node","children":[{"key":"doge","status":"node","children":[{"key":"wow","oldValue":"","newValue":"so much","status":"updated"}]},{"key":"key","value":"value","status":"unchanged"},{"key":"ops","value":"vops","status":"added"}]}]}]
 ```
 

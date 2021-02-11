@@ -10,21 +10,26 @@ const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', 
 const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
 
 test('comparing json vs json', () => {
-  const testDiff = genDiff(getFixturePath('testFile1.json'), getFixturePath('testFile2.json'));
-  expect(testDiff).toMatch(readFile('testResult.txt'));
+  const testDiff = genDiff(getFixturePath('before.json'), getFixturePath('after.json'));
+  expect(testDiff).toMatch(readFile('stylishResult.txt'));
 });
 
 test('comparing json vs yaml', () => {
-  const testDiff = genDiff(getFixturePath('testFile1.json'), getFixturePath('testFile2.yaml'));
-  expect(testDiff).toMatch(readFile('testResult.txt'));
+  const testDiff = genDiff(getFixturePath('before.json'), getFixturePath('after.yaml'));
+  expect(testDiff).toMatch(readFile('stylishResult.txt'));
 });
 
 test('comparing yaml vs yaml', () => {
-  const testDiff = genDiff(getFixturePath('testFile1.yaml'), getFixturePath('testFile2.yaml'));
-  expect(testDiff).toMatch(readFile('testResult.txt'));
+  const testDiff = genDiff(getFixturePath('before.yaml'), getFixturePath('after.yaml'));
+  expect(testDiff).toMatch(readFile('stylishResult.txt'));
 });
 
 test('comparing json vs yaml in plain format', () => {
-  const testDiff = genDiff(getFixturePath('testFile1.json'), getFixturePath('testFile2.yaml'), 'plain');
+  const testDiff = genDiff(getFixturePath('before.json'), getFixturePath('after.yaml'), 'plain');
   expect(testDiff).toMatch(readFile('plainResult.txt'));
+});
+
+test('comparing json vs yaml in json format', () => {
+  const testDiff = genDiff(getFixturePath('before.json'), getFixturePath('after.yaml'), 'json');
+  expect(testDiff).toMatch(readFile('jsonResult.txt'));
 });

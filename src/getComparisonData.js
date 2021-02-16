@@ -8,18 +8,19 @@ const getComparisonData = (data1, data2) => {
     if (_.isPlainObject(data1[key]) && _.isPlainObject(data2[key])) {
       const children = getComparisonData(data1[key], data2[key]);
       return { key, type: 'node', children };
-    } 
+    }
     if (!_.has(data1, key)) {
       return { key, value: data2[key], type: 'added' };
-    } 
+    }
     if (!_.has(data2, key)) {
       return { key, value: data1[key], type: 'deleted' };
-    } 
+    }
     if (_.isEqual(data1[key], data2[key])) {
       return { key, value: data1[key], type: 'unchanged' };
-    } else {
-      return { key, oldValue: data1[key], newValue: data2[key], type: 'updated' };
     }
+    return {
+      key, oldValue: data1[key], newValue: data2[key], type: 'updated',
+    };
   });
 };
 

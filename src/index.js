@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import process from 'process';
 import parse from './parsers.js';
 import format from './formatters/index.js';
 import getComparisonData from './getComparisonData.js';

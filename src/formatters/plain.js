@@ -12,8 +12,8 @@ const valueToString = (val) => {
 
 const plain = (tree) => {
   const iter = (node, parent) => {
-    const result = node.filter(((item) => item.status !== 'unchanged')).flatMap((item) => {
-      switch (item.status) {
+    const result = node.filter(((item) => item.type !== 'unchanged')).flatMap((item) => {
+      switch (item.type) {
         case 'added':
           return `Property '${parent}${item.key}' was added with value: ${valueToString(item.value)}`;
         case 'deleted':
@@ -23,7 +23,7 @@ const plain = (tree) => {
         case 'node':
           return `${iter(item.children, `${parent}${item.key}.`)}`;
         default:
-          throw new Error('Unknown value status');
+          throw new Error('Unknown value type');
       }
     });
     return result.join('\n');

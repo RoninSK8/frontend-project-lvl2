@@ -1,26 +1,26 @@
 import _ from 'lodash';
 
-const getComparisonData = (file1Data, file2Data) => {
-  const file1keys = Object.keys(file1Data);
-  const file2keys = Object.keys(file2Data);
-  const uniqueKeys = _.sortBy(_.union(file1keys, file2keys));
-  return uniqueKeys.reduce((result, key) => {
-    if (_.isObject(file1Data[key]) && _.isObject(file2Data[key])) {
-      const children = getComparisonData(file1Data[key], file2Data[key]);
-      result.push({ key, status: 'node', children });
-    } else if (!_.has(file1Data, key)) {
-      result.push({ key, value: file2Data[key], status: 'added' });
-    } else if (!_.has(file2Data, key)) {
-      result.push({ key, value: file1Data[key], status: 'deleted' });
-    } else if (_.isEqual(file1Data[key], file2Data[key])) {
-      result.push({ key, value: file1Data[key], status: 'unchanged' });
+const getComparisonData = (data1, data2) => {
+  const data1keys = Object.keys(data1);
+  const data2keys = Object.keys(data2);
+  const uniqueKeys = _.sortBy(_.union(data1keys, data2keys));
+  return uniqueKeys.map((key) => {
+    if (_.isPlainObject(data1[key]) && _.isPlainObject(data2[key])) {
+      const children = getComparisonData(data1[key], data2[key]);
+      return { key, type: 'node', children };
+    } 
+    if (!_.has(data1, key)) {
+      return { key, value: data2[key], type: 'added' };
+    } 
+    if (!_.has(data2, key)) {
+      return { key, value: data1[key], type: 'deleted' };
+    } 
+    if (_.isEqual(data1[key], data2[key])) {
+      return { key, value: data1[key], type: 'unchanged' };
     } else {
-      result.push({
-        key, oldValue: file1Data[key], newValue: file2Data[key], status: 'updated',
-      });
+      return { key, oldValue: data1[key], newValue: data2[key], type: 'updated' };
     }
-    return result;
-  }, []);
+  });
 };
 
 export default getComparisonData;

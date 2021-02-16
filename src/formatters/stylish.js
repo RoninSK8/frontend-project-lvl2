@@ -19,7 +19,7 @@ const convertToString = (data, givenDepth) => {
 const stylish = (tree) => {
   const iter = (node, depth) => {
     const result = node.flatMap((item) => {
-      switch (item.status) {
+      switch (item.type) {
         case 'added':
           return `${' '.repeat(depth * 4 - 2)}+ ${item.key}: ${convertToString(item.value, depth)}`;
         case 'deleted':
@@ -31,7 +31,7 @@ const stylish = (tree) => {
         case 'node':
           return `${'    '.repeat(depth)}${item.key}: {\n${iter(item.children, depth + 1)}\n${'    '.repeat(depth)}}`;
         default:
-          throw new Error('Unknown value status');
+          throw new Error('Unknown value type');
       }
     });
     return result.join('\n');

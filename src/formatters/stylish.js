@@ -1,19 +1,32 @@
 import _ from 'lodash';
 
-const convertToString = (data, givenDepth) => {
-  if (_.isObject(data)) {
-    const iter = (object, depth) => {
-      const entries = Object.entries(object);
-      return entries.map(([key, value]) => {
-        if (_.isObject(value)) {
-          return `${'    '.repeat(depth)}${key}: {\n${iter(value, depth + 1)}\n${'    '.repeat(depth)}}`;
-        }
-        return `${'    '.repeat(depth)}${key}: ${value}`;
-      });
-    };
-    return `{\n${iter(data, givenDepth + 1).join('\n')}\n${'    '.repeat(givenDepth)}}`;
+const generateIdent = (depth, sign = ' ') => {
+  switch (sign) {
+    case '+':
+      return `${' '.repeat(depth * 4 - 2)}+ `;
+    case '-':
+      return `${' '.repeat(depth * 4 - 2)}- `;
+    case ' ':
+      return `${'    '.repeat(depth)}`;
+    default:
+      throw new Error('Unknown sign');
   }
-  return data;
+};
+
+const convertToString = (data, givenDepth) => {
+  if (!_.isPlainObject(data)) {
+    return data;
+  }
+  const iter = (object, depth) => {
+    const entries = Object.entries(object);
+    return entries.map(([key, value]) => {
+      if (_.isObject(value)) {
+        return `${generateIdent(depth)}${key}: {\n${iter(value, depth + 1)}\n${generateIdent(depth)}}`;
+      }
+      return `${generateIdent(depth)}${key}: ${value}`;
+    });
+  };
+  return `{\n${iter(data, givenDepth + 1).join('\n')}\n${generateIdent(givenDepth)}}`;
 };
 
 const stylish = (tree) => {
@@ -21,15 +34,15 @@ const stylish = (tree) => {
     const result = node.flatMap((item) => {
       switch (item.type) {
         case 'added':
-          return `${' '.repeat(depth * 4 - 2)}+ ${item.key}: ${convertToString(item.value, depth)}`;
+          return `${generateIdent(depth, '+')}${item.key}: ${convertToString(item.value, depth)}`;
         case 'deleted':
-          return `${' '.repeat(depth * 4 - 2)}- ${item.key}: ${convertToString(item.value, depth)}`;
+          return `${generateIdent(depth, '-')}${item.key}: ${convertToString(item.value, depth)}`;
         case 'unchanged':
-          return `${'    '.repeat(depth)}${item.key}: ${convertToString(item.value, depth)}`;
+          return `${generateIdent(depth)}${item.key}: ${convertToString(item.value, depth)}`;
         case 'updated':
-          return `${' '.repeat(depth * 4 - 2)}- ${item.key}: ${convertToString(item.oldValue, depth)}\n${' '.repeat(depth * 4 - 2)}+ ${item.key}: ${convertToString(item.newValue, depth)}`;
+          return `${generateIdent(depth, '-')}${item.key}: ${convertToString(item.oldValue, depth)}\n${generateIdent(depth, '+')}${item.key}: ${convertToString(item.newValue, depth)}`;
         case 'node':
-          return `${'    '.repeat(depth)}${item.key}: {\n${iter(item.children, depth + 1)}\n${'    '.repeat(depth)}}`;
+          return `${generateIdent(depth)}${item.key}: {\n${iter(item.children, depth + 1)}\n${generateIdent(depth)}}`;
         default:
           throw new Error('Unknown value type');
       }

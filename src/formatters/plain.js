@@ -23,7 +23,7 @@ const plain = (tree) => {
         case 'node':
           return `${iter(item.children, `${parent}${item.key}.`)}`;
         default:
-          throw new Error('Unknown value type');
+          throw new Error(`Unknown value type :${item.type}`);
       }
     });
     return result.join('\n');

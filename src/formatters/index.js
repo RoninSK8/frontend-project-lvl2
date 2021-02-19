@@ -11,7 +11,7 @@ const format = (data, formatter) => {
     case 'json':
       return json(data);
     default:
-      throw new Error('Unknown output format');
+      throw new Error(`Unknown output format: ${formatter}`);
   }
 };
 

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const getComparisonData = (data1, data2) => {
+const buidDiffTree = (data1, data2) => {
   const data1keys = Object.keys(data1);
   const data2keys = Object.keys(data2);
   const uniqueKeys = _.sortBy(_.union(data1keys, data2keys));
@@ -15,7 +15,7 @@ const getComparisonData = (data1, data2) => {
       return { key, value: data1[key], type: 'unchanged' };
     }
     if (_.isPlainObject(data1[key]) && _.isPlainObject(data2[key])) {
-      const children = getComparisonData(data1[key], data2[key]);
+      const children = buidDiffTree(data1[key], data2[key]);
       return { key, type: 'node', children };
     }
     return {
@@ -24,4 +24,4 @@ const getComparisonData = (data1, data2) => {
   });
 };
 
-export default getComparisonData;
+export default buidDiffTree;

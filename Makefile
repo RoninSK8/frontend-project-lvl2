@@ -1,8 +1,17 @@
+install:
+	npm install
+
+link:
+	npm link
+
+test:
+	npx -n --experimental-vm-modules jest
+
+test-watch:
+	npx -n --experimental-vm-modules jest --watch
+
 lint:
 	npx eslint .
 
-test:
-	npx -n --experimental-vm-modules jest --watch
-
 test-coverage:
-	npm test -- --coverage --coverageProvider=v8
+	npx -n --experimental-vm-modules jest --coverage

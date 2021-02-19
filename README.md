@@ -83,7 +83,10 @@ $ git clone https://github.com/RoninSK8/frontend-project-lvl2.git
 $ cd frontend-project-lvl2
 
 # Install
-$ npm install
+$ make install
+
+# Install globally
+$ make link
 ```
 
 ## How to use

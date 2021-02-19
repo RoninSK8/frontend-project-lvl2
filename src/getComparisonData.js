@@ -5,10 +5,6 @@ const getComparisonData = (data1, data2) => {
   const data2keys = Object.keys(data2);
   const uniqueKeys = _.sortBy(_.union(data1keys, data2keys));
   return uniqueKeys.map((key) => {
-    if (_.isPlainObject(data1[key]) && _.isPlainObject(data2[key])) {
-      const children = getComparisonData(data1[key], data2[key]);
-      return { key, type: 'node', children };
-    }
     if (!_.has(data1, key)) {
       return { key, value: data2[key], type: 'added' };
     }
@@ -17,6 +13,10 @@ const getComparisonData = (data1, data2) => {
     }
     if (_.isEqual(data1[key], data2[key])) {
       return { key, value: data1[key], type: 'unchanged' };
+    }
+    if (_.isPlainObject(data1[key]) && _.isPlainObject(data2[key])) {
+      const children = getComparisonData(data1[key], data2[key]);
+      return { key, type: 'node', children };
     }
     return {
       key, oldValue: data1[key], newValue: data2[key], type: 'updated',
